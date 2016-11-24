@@ -2,6 +2,7 @@ package com.example.switchwifi;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,12 +17,13 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -42,19 +44,29 @@ public class MainActivity extends AppCompatActivity {
     boolean isSwitchWifi = false;
     //AlertDialog.Builder builder;
 
+    Button btnShowDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         receiverRSSIChanged = this.myRssiChangeReceiver;
-        recieverNetworkChanged = this.NetworkChangedState;
 
         this.registerReceiver(receiverRSSIChanged,
                 new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
 
 //        CreateAlertDialog(this).show();
         alertDialog = CreateAlertDialog(this).create();
+
+        btnShowDialog = (Button)findViewById(R.id.btnShowDialog);
+        btnShowDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.show();
+            }
+        });
+
 //        if (!alertDialog.isShowing()) {
 //            alertDialog.show();
 //        }
@@ -138,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public AlertDialog.Builder CreateAlertDialog(Context context) {
+    public AlertDialog.Builder CreateAlertDialog(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Do you want to switch wifi ?")
                 .setPositiveButton("Auto", new DialogInterface.OnClickListener() {
@@ -158,14 +170,13 @@ public class MainActivity extends AppCompatActivity {
                         //Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                         //startActivityForResult(intent, 0);
                         //startActivity(intent);
-
-                        showListWifi(MainActivity.this);
+                        Dialog dialogListWifi = new listDialogCustom(context);
+                        dialogListWifi.show();
+                        //showListWifi(MainActivity.this);
                         dialog.dismiss();
                     }
                 });
         return builder;
-        //builder.create();
-        //builder.show();
     }
 
     private BroadcastReceiver myRssiChangeReceiver = new BroadcastReceiver() {
@@ -196,15 +207,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
-    BroadcastReceiver NetworkChangedState = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.e(TAG, "changed network ");
-
-        }
-    };
-
 
     public void showListWifi(final Context context) {
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
@@ -246,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                             if (wificonfig.get(i).SSID.toString().equals("\"" + SSIDWifi + "\"")) {
                                 isSwitchWifi = wifiManager.enableNetwork(wificonfig.get(i).networkId, true);
                                 if (isSwitchWifi) {
-                                    SystemClock.sleep(2000);
+                                   // SystemClock.sleep(2000);
                                     registerReceiver(receiverRSSIChanged,
                                             new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
                                 }
@@ -304,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "signal max strong :" + signalMax + " of wifi :" + IDNetworkStrong);
         isSwitchWifi = wifiManager.enableNetwork(IDNetworkStrong, true);
         if (isSwitchWifi) {
-            SystemClock.sleep(2000);
+            //SystemClock.sleep(2000);
             registerReceiver(receiverRSSIChanged,
                     new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
         }

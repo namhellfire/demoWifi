@@ -22,20 +22,20 @@ public class ListWifiAdapter extends BaseAdapter {
     private List<String> listSSID;
     private List<Integer> listLevel;
 
-    public ListWifiAdapter(Context context, List<String> listSSID, List<Integer> listLevel) {
-        this.listWifi = listWifi;
-        this.listLevel = listLevel;
+    public ListWifiAdapter(Context context, List<String> listSSID) {
+        this.listSSID = listSSID;
+        //this.listLevel = listLevel;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return listWifi.size();
+        return listSSID.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return 0;
+        return listSSID.get(i);
     }
 
     @Override
@@ -43,8 +43,9 @@ public class ListWifiAdapter extends BaseAdapter {
         return 0;
     }
 
+
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
         if (view == null) {
             view = layoutInflater.inflate(R.layout.adapter_list_dialog, null);
@@ -57,7 +58,7 @@ public class ListWifiAdapter extends BaseAdapter {
         }
 
         holder.tvSSID.setText(listSSID.get(i));
-        holder.imgLevel.setImageResource(R.drawable.ic_signal_wifi_0_bar);
+        holder.imgLevel.setImageResource(R.drawable.ic_signal_wifi_2_bar);
         return view;
     }
 
