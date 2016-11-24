@@ -39,12 +39,21 @@ public class listDialogCustom extends Dialog {
         myListOfItems.add("wifi 6");
         myListOfItems.add("wifi 7");
 
+        List<Integer> listLevel = new ArrayList<>();
+        listLevel.add(1);
+        listLevel.add(2);
+        listLevel.add(3);
+        listLevel.add(4);
+        listLevel.add(2);
+        listLevel.add(4);
+        listLevel.add(0);
+
 
         View view = getLayoutInflater().inflate(R.layout.custom_list_dialog, null);
 
         ListView lvListWifi = (ListView) view.findViewById(R.id.lvWifi);
 
-        ListWifiAdapter adapter = new ListWifiAdapter(context, myListOfItems);
+        ListWifiAdapter adapter = new ListWifiAdapter(context, myListOfItems, listLevel);
 
         lvListWifi.setAdapter(adapter);
 

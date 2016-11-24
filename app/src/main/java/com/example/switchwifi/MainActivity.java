@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
         btnShowDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialog.show();
+                Dialog dialogListWifi = new listDialogCustom(MainActivity.this);
+                dialogListWifi.show();
             }
         });
 
@@ -170,9 +171,10 @@ public class MainActivity extends AppCompatActivity {
                         //Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                         //startActivityForResult(intent, 0);
                         //startActivity(intent);
-                        Dialog dialogListWifi = new listDialogCustom(context);
-                        dialogListWifi.show();
-                        //showListWifi(MainActivity.this);
+
+                        //Dialog dialogListWifi = new listDialogCustom(context);
+                        //dialogListWifi.show();
+                        showListWifi(MainActivity.this);
                         dialog.dismiss();
                     }
                 });
